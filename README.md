@@ -1,135 +1,122 @@
-# 🔐 Brute Force Detection & Investigation with Microsoft Sentinel
-
-## 🔖 Project Title
-**Brute Force Detection & Investigation with Microsoft Sentinel**
+# Brute Force Detection & Investigation with Microsoft Sentinel
 
 ---
 
-## 🎯 Objective
+## Project Overview
 
-To detect brute force login attacks using Microsoft Azure Sentinel by:
-
-- Connecting virtual machine logs to Sentinel
-- Creating analytics rules using Kusto Query Language (KQL)
-- Generating and managing incidents
-- Enabling automated threat response
+This project demonstrates how to detect and investigate brute force attacks—where attackers repeatedly try multiple username/password combinations to gain unauthorized access—using **Microsoft Azure Sentinel**. By connecting Azure Virtual Machine logs to Sentinel, creating custom analytics rules with Kusto Query Language (KQL), and visualizing attack patterns, security teams can monitor and respond effectively to login-based threats in real time.
 
 ---
 
-## 🛠 Tools Used
+## What is a Brute Force Attack?
 
-- **Microsoft Azure Portal**
-- **Microsoft Sentinel (Defender for SIEM)**
-- **Log Analytics Workspace (LAWS)**
-- **Azure Virtual Machine** (Windows/Linux)
-- **Kusto Query Language (KQL)**
+A brute force attack is a cyberattack method where an attacker systematically attempts numerous combinations of usernames and passwords to gain unauthorized access. These attacks typically manifest as a high number of failed login attempts within a short timeframe, which can be detected via security logs.
 
 ---
 
-## 📹 Steps Demonstrated in the Video
+## How Microsoft Sentinel Helps
 
-### ✅ 1. Accessing Microsoft Sentinel
-- Opened Azure Portal in a browser.
-- Navigated to **Microsoft Sentinel** service.
-- Displayed dashboard and overview panel.
+Microsoft Sentinel is a cloud-native Security Information and Event Management (SIEM) platform that:
 
-### ✅ 2. Log Analytics Workspace (LAWS) Selection
-- Showed the process of:
-  - Selecting an existing or creating a new Log Analytics Workspace.
-  - This workspace is used to store logs from connected VMs and other resources.
-
-### ✅ 3. Initial Configuration Overview
-- Demonstrated:
-  - Attaching Sentinel to the LAWS.
-  - Exploring Sentinel components:
-    - **Data Connectors**
-    - **Analytics Rules**
-    - **Incidents**
+- Collects security logs from Azure Virtual Machines (Windows/Linux)
+- Analyzes logs in real time using custom Analytics Rules built with Kusto Query Language (KQL)
+- Detects suspicious behavior such as brute force login attempts
+- Generates alerts and incidents for security teams to investigate
+- Provides Workbooks to visualize attack patterns and metrics on customizable dashboards
 
 ---
 
-## 🛡 Core Concept Demonstrated
+## Tools Used
 
-The video covers **Phase 1** of the brute force detection project — configuring Microsoft Sentinel and Log Analytics Workspace.  
-Without this initial setup, logs cannot be collected, and analytics cannot be performed.
-
----
-
-## 🔍 Next Steps in the Full Project (Beyond the Video)
-
-### 🔹 1. Connect Azure VM to the Workspace
-- Install **Log Analytics Agent** on the VM.
-- Connect the VM using the Workspace ID and Key.
-
-### 🔹 2. Send Logs to Sentinel
-- Ensure security logs are forwarded:
-  - **Windows:** Event ID `4625` (failed login)
-  - **Linux:** `Syslog` entries containing `"Failed password"`
-
-### 🔹 3. Create Analytics Rule with KQL
-Example query for Windows:
-```kql
-SecurityEvent
-| where EventID == 4625
-| summarize FailedAttempts = count()
-    by Account, IPAddress = RemoteHost, bin(TimeGenerated, 5m)
-| where FailedAttempts >= 5
-
-
-
-
-# 🚨 What is a Brute Force Attack?
-
-A **Brute Force Attack** is a method where attackers attempt to gain unauthorized access by systematically trying many combinations of usernames and passwords. These attacks are often detected by monitoring for **multiple failed login attempts** within a short period.
+- Microsoft Azure Portal  
+- Microsoft Sentinel (Azure Defender for SIEM)  
+- Log Analytics Workspace (LAWS)  
+- Azure Virtual Machines (Windows/Linux)  
+- Kusto Query Language (KQL)
 
 ---
 
-# ⚙️ How Microsoft Sentinel Helps
+## Project Objectives
 
-Microsoft Sentinel, a cloud-native SIEM solution, enables:
-
-- **Log Collection** from Azure Virtual Machines (Windows/Linux)
-- **Real-time Analysis** using Kusto Query Language (KQL)
-- **Threat Detection** through Analytics Rules
-- **Alerting & Incident Management**
-- **Data Visualization** using custom Workbooks
-
----
-
-# 🛠️ Steps to Detect Brute Force Attacks
-
-## ✅ Step 1: Collect Security Logs
-
-1. **Deploy a VM** (Windows or Linux) in Azure.
-2. **Connect the VM** to a **Log Analytics Workspace (LAWS)**.
-3. Ensure relevant security logs are collected:
-   - **Windows:** `SecurityEvent` with `Event ID 4625` (Failed Logon)
-   - **Linux:** `Syslog` entries containing `"Failed password"`
+- Connect virtual machines to Azure Sentinel through Log Analytics Workspace  
+- Collect security logs related to login attempts  
+- Create KQL-based custom Analytics Rules to detect brute force attack patterns  
+- Trigger alerts and manage incidents based on detection  
+- Visualize login failures and attacker details on Sentinel Workbooks  
+- Lay groundwork for automating responses such as blocking suspicious IPs
 
 ---
 
-## ✅ Step 2: Create Analytics Rule in Sentinel
+## Step-by-Step Implementation
 
-### 📌 KQL Query for Windows
+### Step 1: Access Microsoft Sentinel
+
+- Open the [Azure Portal](https://portal.azure.com) in your browser  
+- Navigate to **Microsoft Sentinel** service  
+- View the Sentinel dashboard and overview panel  
+
+### Step 2: Select or Create Log Analytics Workspace
+
+- Select an existing Log Analytics Workspace or create a new one  
+- This workspace stores logs from Azure resources including VMs  
+
+### Step 3: Initial Configuration
+
+- Attach Microsoft Sentinel to the Log Analytics Workspace  
+- Explore key components like Data Connectors, Analytics Rules, and Incidents  
+
+> This foundational setup enables log ingestion and threat detection capabilities within Sentinel.
+
+### Step 4: Connect Azure VM to Log Analytics Workspace
+
+- Deploy a VM (Windows or Linux) in Azure  
+- Connect the VM to the Log Analytics Workspace for log forwarding  
+
+### Step 5: Collect Security Logs
+
+- For **Windows VMs**: Monitor Security Events with Event ID **4625** (failed login)  
+- For **Linux VMs**: Monitor Syslog entries with messages containing **"Failed password"**  
+
+### Step 6: Create Custom Analytics Rule to Detect Brute Force Attacks
+
+- Go to **Microsoft Sentinel > Analytics > + Create**  
+- Use the following sample KQL queries depending on your VM OS:  
+
+#### Sample KQL Query for Windows
+
+#### Sample KQL Query for Windows
+
+#### Sample KQL Query for Windows
 
 ```kql
 SecurityEvent
 | where EventID == 4625
-| summarize FailedAttempts = count() 
-    by Account, IPAddress = RemoteHost, bin(TimeGenerated, 5m)
+| summarize FailedAttempts = count() by Account, IPAddress
 | where FailedAttempts >= 5
+```
+## Step-by-Step Implementation
+### Steps to Create a Resource Group:1
+Log in to the Azure Portal
+🔗 https://portal.azure.com
+
+In the search bar at the top, type:
+Resource groups → Click on the Resource groups service.
+
+Click + Create at the top left of the page.
+
+Fill in the required details:
+
+Subscription: Select your Azure subscription (e.g., Free Trial).
+
+Resource group name: Enter a name, e.g., BruteForce-RG
+
+Region: Choose the region where your resources will reside (e.g., Central India, East US).
+
+Click Review + Create.
+
+After validation passes, click Create
+🎥 [Watch the Video Walkthrough](https://github.com/user-attachments/assets/e765d1cd-e395-4427-89b6-b348997)
 
 
 
 
-## Step 1: Accessing Microsoft Sentinel
-
-This step demonstrates how to access Microsoft Sentinel in the Azure Portal and set up the initial environment for brute force attack detection.
-
-- Open the [Azure Portal](https://portal.azure.com/)
-- Navigate to **Microsoft Sentinel** service
-- Explore the Sentinel dashboard and overview panel
-- Understand the workspace selection and initial configuration options such as Data Connectors, Analytics Rules, and Incidents
-
-🎥 Watch the walkthrough video here:  
-[Accessing Microsoft Sentinel - Step 1](https://github.com/user-attachments/assets/e765d1cd-e395-4427-89b6-b34899715d7b)
