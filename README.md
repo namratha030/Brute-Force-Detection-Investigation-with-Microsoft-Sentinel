@@ -39,7 +39,7 @@ To build a detection system using Microsoft Sentinel that:
 - Log into [Azure Portal](https://portal.azure.com/)
 - Search for and open **Microsoft Sentinel**
 - Click **+ Add** to attach Sentinel to an existing or new **Log Analytics Workspace**
-- https://github.com/user-attachments/assets/fbfc03d8-a083-4cd4-b8ba-383f99a12532
+
 
 ---
 
