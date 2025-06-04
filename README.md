@@ -52,3 +52,8 @@ This project demonstrates how to configure Microsoft Azure Sentinel to detect br
 - Validate logs via:
   ```kql
   SecurityEvent | take 10
+
+
+
+  https://github.com/user-attachments/assets/fbfc03d8-a083-4cd4-b8ba-383f99a12532
+  
