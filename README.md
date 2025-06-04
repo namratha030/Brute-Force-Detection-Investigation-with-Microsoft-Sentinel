@@ -68,7 +68,7 @@ Region: Choose the region where your resources will reside (e.g., Central India,
 Click Review + Create.
 
 After validation passes, click Create
-🎥 [Watch the Video Walkthrough](https://github.com/user-attachments/assets/1dae53e5-a30c-4bd3-8c78-de5a613ec69c)
+
 
 ### 2)Steps to Create a Log Analytics Workspace:
 Log in to the Azure Portal
@@ -91,6 +91,271 @@ Receive logs from your VM
 Let Sentinel run KQL queries for detection
 
 Be linked in the next step to Microsoft Sentinel
+
+### 3)Steps to Enable Microsoft Sentinel:
+Log in to the Azure Portal
+🔗 https://portal.azure.com
+
+In the search bar, type:
+Microsoft Sentinel → Click the service (may also appear as Microsoft Defender for SIEM in new versions).
+
+Click + Create / + Add at the top.
+
+Select your Log Analytics Workspace:
+
+Subscription: Select the one you're using (e.g., Free Trial)
+
+Workspace: Choose the one created earlier → BruteForceLogs
+
+Click Add Microsoft Sentinel.
+
+### 4)Create a VM to Access via RDP Protocol
+Prerequisites:
+You have an Azure account.
+
+You have created a Resource Group.
+
+You want to create a Windows VM (to use RDP).
+
+Step-by-Step Guide:
+1. Log in to Azure Portal
+Go to https://portal.azure.com
+
+Sign in with your credentials.
+
+2. Navigate to 'Create a Virtual Machine'
+On the Azure portal homepage, click Create a resource (top-left corner).
+
+Search for Virtual Machine and select Virtual Machine.
+
+Click Create > Azure virtual machine.
+
+3. Basics Tab
+Subscription: Select your subscription.
+
+Resource group: Select the resource group you created earlier or create a new one.
+
+Virtual machine name: Give a name for your VM (e.g., MyWinVM).
+
+Region: Choose the Azure region closest to you.
+
+Availability options: Choose as per your requirement (default: no infrastructure redundancy required).
+
+Image: Select Windows Server 2019 Datacenter (or any Windows OS).
+
+Size: Choose the VM size based on your needs (e.g., Standard B2s).
+
+Username: Enter an admin username.
+
+Password: Enter a strong password (this will be used to log in via RDP).
+
+Inbound port rules: Select Allow selected ports and check RDP (3389).
+
+4. Disks Tab
+Select the OS disk type (e.g., Standard SSD or Premium SSD).
+
+You can keep other settings default or customize based on performance needs.
+
+5. Networking Tab
+Virtual network: Default or create a new VNet.
+
+Subnet: Default or custom.
+
+Public IP: Ensure a public IP address is assigned to allow RDP access from the internet.
+
+NIC network security group: Choose Basic and allow RDP (3389) port.
+
+Confirm Accelerated networking is off (default).
+
+6. Management, Advanced, Tags Tabs
+Leave default or configure based on your needs (usually defaults are fine for basic VM).
+
+7. Review + Create
+Azure will validate the settings.
+
+Once validation passes, click Create.
+
+Wait for deployment to complete (few minutes).
+
+8. Access VM via RDP
+Go to your Virtual Machines in Azure Portal.
+
+Select your created VM.
+
+Copy the public IP address from the Overview page.
+
+On your local machine, open Remote Desktop Connection (Windows built-in tool).
+
+Enter the public IP address.
+
+Connect using the username and password you set during VM creation.
+
+You will now access your VM desktop via RDP.
+
+### 5)Step 5: View and Analyze Logs in Azure Sentinel
+1. Navigate to Azure Sentinel
+In the Azure Portal, search for and select Microsoft Sentinel.
+
+Open the Sentinel workspace you set up earlier (linked to your Log Analytics workspace).
+
+2. Go to Logs (Log Analytics)
+In your Sentinel workspace menu, click on Logs.
+
+This opens the Log Analytics query editor where you can run Kusto Query Language (KQL) queries against your collected data.
+
+3. Check Incoming Logs
+Run simple queries to verify logs from your VM are flowing into Sentinel.
+
+Example:
+
+kql
+Copy
+Edit
+// Check Security Event logs from your VM
+SecurityEvent
+| where TimeGenerated > ago(1h)
+| sort by TimeGenerated desc
+This will show recent Windows Security Events (like login attempts).
+
+4. Detect Brute Force or Failed Login Attempts
+Use this KQL query to find multiple failed RDP login attempts, which may indicate brute force activity:
+
+kql
+Copy
+Edit
+SecurityEvent
+| where TimeGenerated > ago(1d)
+| where EventID == 4625  // Failed login event ID on Windows
+| summarize FailedAttempts = count() by Account, IPAddress = tostring(parse_json(EventData).IpAddress), bin(TimeGenerated, 1h)
+| where FailedAttempts > 5
+| order by FailedAttempts desc
+This query summarizes failed login attempts by account and IP address in hourly bins, showing only those with more than 5 failed attempts.
+
+### 6) Investigate Incidents (Brute Force Attack Detection in Azure Sentinel)
+Once an Analytics Rule (Step 5) triggers — for example, due to multiple failed RDP login attempts (Event ID 4625) — Microsoft Sentinel automatically creates an incident. Here's how you can investigate it:
+
+🔍 1. Go to the Incidents Tab
+In the Microsoft Sentinel workspace, click on Incidents in the left-hand menu.
+
+This shows a list of all security incidents generated from analytics rules.
+
+🛠 2. Open the Specific Incident
+Click on the incident that was created from your brute force detection rule.
+
+This opens a detailed incident view with:
+
+Alert details
+
+Entities involved (e.g., accounts, IP addresses)
+
+Timestamps
+
+Severity level (e.g., Low, Medium, High)
+
+🧩 3. Review the Alert Details
+Under the "Alert Details" tab:
+
+See the query that triggered the alert.
+
+View how many failed login attempts occurred.
+
+Check which IP address or account tried to brute force the system.
+
+🧠 4. Analyze Entities (Accounts, IPs, Hosts)
+Sentinel automatically extracts entities such as:
+
+Account Name (targeted account)
+
+Source IP Address (attacker’s IP)
+
+Host Name (target VM
+
+### 7) View Logs in Pie Chart and Bar Graph (Using Workbooks in Sentinel)
+Purpose: Visualizing logs (like failed logins, IPs, users) helps SOC teams quickly identify patterns and anomalies in brute force attacks.
+
+🎯 Tools Used:
+Microsoft Sentinel
+
+Workbooks (Sentinel dashboard for charts/graphs)
+
+KQL Queries for data representation
+
+🪜 Step-by-Step Process:
+🧭 1. Open Workbooks in Sentinel
+Go to Microsoft Sentinel from Azure Portal.
+
+Select your Sentinel workspace.
+
+In the left menu, click on Workbooks.
+
+📋 2. Use an Existing Workbook or Create New One
+You can choose from built-in templates like:
+
+“Security Insights”
+
+“Sign-in logs”
+
+“Security Events”
+
+OR click + New to create your custom Workbook.
+
+💻 3. Add Visualizations
+In the new workbook:
+
+Click "Add query"
+
+Choose your data source: usually SecurityEvent
+
+Paste your KQL query (see examples below)
+
+Choose the chart type: Pie, Bar, Time Chart, etc.
+
+📊 Example 1: Pie Chart – Failed Logins by IP Address
+kql
+Copy
+Edit
+SecurityEvent
+| where TimeGenerated > ago(1d)
+| where EventID == 4625
+| summarize FailedAttempts = count() by IPAddress = tostring(parse_json(EventData).IpAddress)
+| sort by FailedAttempts desc
+Select Pie chart as the visualization type.
+
+This shows which IPs are responsible for most failed logins (brute force sources).
+
+📈 Example 2: Bar Graph – Failed Logins Over Time
+kql
+Copy
+Edit
+SecurityEvent
+| where TimeGenerated > ago(1d)
+| where EventID == 4625
+| summarize FailedAttempts = count() by bin(TimeGenerated, 1h)
+| render barchart
+Select Bar chart or Time chart
+
+This shows brute force attack intensity per hour.
+
+🧑‍💻 Example 3: Bar Graph – Failed Logins by Username
+kql
+Copy
+Edit
+SecurityEvent
+| where TimeGenerated > ago(1d)
+| where EventID == 4625
+| summarize FailedAttempts = count() by TargetUserName
+| sort by FailedAttempts desc
+Helps detect which user accounts are being attacked the most.
+
+🧷 4. Customize the Workbook
+Add text blocks, filters, and drop-downs (like time range or IP address).
+
+Give your workbook a title (e.g., “Brute Force Attack Dashboard”).
+
+Save it for reuse and team access
+
+🎥 [Watch Video Walkthrough](https://drive.google.com/file/d/1NokU60OhpzR06uvwGrxMD80TJgPFB4-O/view?usp=drive_link)
+
 
 
 
