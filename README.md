@@ -1,59 +1,76 @@
 # 🔐 Brute Force Detection & Investigation with Microsoft Sentinel
 
+## 📘 Project Overview
+
+A **Brute Force Attack** occurs when an attacker systematically attempts multiple username and password combinations to gain unauthorized access to a system. These are often characterized by a high volume of failed login attempts in a short time frame.
+
+This project demonstrates how to configure **Microsoft Sentinel** to detect and investigate brute-force login attempts on an Azure Virtual Machine (Windows or Linux). It includes log collection, analytic rule creation using **Kusto Query Language (KQL)**, incident generation, and response automation using **Logic Apps**.
+
+---
+
 ## 🎯 Objective
 
-This project demonstrates how to configure Microsoft Azure Sentinel to detect brute-force login attacks on a virtual machine (Windows or Linux). It walks through log collection, analytics rule creation using Kusto Query Language (KQL), incident generation, and automated response using Logic Apps.
+To build a detection system using Microsoft Sentinel that:
+
+- Collects and analyzes VM login data.
+- Identifies brute-force attempts based on failed logins.
+- Automatically generates incidents.
+- Visualizes attack trends using dashboards.
+- Enables automated response actions.
 
 ---
 
 ## 🛠 Tools & Services Used
 
-- Microsoft Azure Portal
-- Microsoft Sentinel (Defender for SIEM)
-- Log Analytics Workspace
-- Azure Virtual Machine (Windows/Linux)
-- Azure Security Center (Optional)
-- Kusto Query Language (KQL)
+- **Microsoft Azure Portal**
+- **Microsoft Sentinel (SIEM)**
+- **Log Analytics Workspace (LAWS)**
+- **Azure Virtual Machine** (Windows or Linux)
+- **Kusto Query Language (KQL)**
+- **Azure Logic Apps** *(optional for automation)*
+- **Azure Security Center** *(optional for posture management)*
 
 ---
 
 ## ✅ Step-by-Step Implementation
 
 ### 1️⃣ Access Microsoft Sentinel
-- Sign in to the [Azure Portal](https://portal.azure.com/)
+
+- Log into [Azure Portal](https://portal.azure.com/)
 - Search for and open **Microsoft Sentinel**
-- Click **+ Add** to start configuring Sentinel
-
-### 2️⃣ Create/Select Log Analytics Workspace (LAWS)
-- If not already created:
-  - Go to **Log Analytics Workspace** → Click **+ Create**
-  - Assign a name, resource group, and region
-- Attach Sentinel to the Workspace:
-  - From Microsoft Sentinel → Click **+ Add** and select the workspace
-
-### 3️⃣ Configure Sentinel Environment
-- Explore Sentinel Dashboard:
-  - **Data Connectors** – Integrate services like VM, Office 365, etc.
-  - **Analytics** – Define rules to detect threats
-  - **Workbooks** – Visualize data
-  - **Incidents** – View generated alerts
+- Click **+ Add** to attach Sentinel to an existing or new **Log Analytics Workspace**
+- https://github.com/user-attachments/assets/fbfc03d8-a083-4cd4-b8ba-383f99a12532
 
 ---
 
-## 🔍 Next Phase: Brute Force Attack Detection
+### 2️⃣ Create or Select Log Analytics Workspace
 
-### 4️⃣ Connect Virtual Machine to LAWS
-- Install **Log Analytics Agent** on the VM
-- Register the agent with the Workspace using Workspace ID and Key
-- Enable **Security and Audit logs** (especially for Windows VM)
+- Go to **Log Analytics Workspaces**
+- Click **+ Create** to set up a workspace (name, region, and resource group)
+- After creation, attach it to Sentinel
 
-### 5️⃣ Send Logs to Sentinel
-- Ensure **SecurityEvent** (Windows) or **Syslog/Auth.log** (Linux) is sent to Sentinel
-- Validate logs via:
-  ```kql
-  SecurityEvent | take 10
+---
 
+### 3️⃣ Connect Azure VM to the Workspace
 
+- Deploy a **Windows or Linux VM**
+- Install the **Log Analytics Agent** on the VM
+- Use Workspace ID and Key to connect the VM to the LAWS
+- Ensure Security logs are being collected:
+  - **Windows**: SecurityEvent (Event ID 4625 for failed logins)
+  - **Linux**: Syslog logs with "Failed password" entries
 
-  https://github.com/user-attachments/assets/fbfc03d8-a083-4cd4-b8ba-383f99a12532
-  
+---
+
+## 🔍 Detecting Brute Force Attacks
+
+### ✅ Step 4: Create Analytics Rule in Sentinel
+
+#### 🔹 Sample KQL for **Windows VM**:
+
+```kql
+SecurityEvent
+| where EventID == 4625
+| summarize FailedAttempts = count() 
+    by Account, IPAddress = RemoteHost, bin(TimeGenerated, 5m)
+| where FailedAttempts >= 5
