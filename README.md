@@ -68,7 +68,7 @@ Region: Choose the region where your resources will reside (e.g., Central India,
 Click Review + Create.
 
 After validation passes, click Create
-🎥 [Watch the Video Walkthrough](https://github.com/user-attachments/assets/e765d1cd-e395-4427-89b6-b34899715d7b)
+🎥 [Watch the Video Walkthrough](https://github.com/user-attachments/assets/1dae53e5-a30c-4bd3-8c78-de5a613ec69c)
 
 
 
