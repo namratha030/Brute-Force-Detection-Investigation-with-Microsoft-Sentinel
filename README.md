@@ -48,7 +48,7 @@ Microsoft Sentinel is a cloud-native Security Information and Event Management (
 ---
 
 ## Step-by-Step Implementation
-### Steps to Create a Resource Group:1
+### 1) Steps to Create a Resource Group:
 Log in to the Azure Portal
 🔗 https://portal.azure.com
 
@@ -69,6 +69,30 @@ Click Review + Create.
 
 After validation passes, click Create
 🎥 [Watch the Video Walkthrough](https://github.com/user-attachments/assets/1dae53e5-a30c-4bd3-8c78-de5a613ec69c)
+
+### 2)Steps to Create a Log Analytics Workspace:
+Log in to the Azure Portal
+🔗 https://portal.azure.com
+
+In the search bar, type:
+Log Analytics workspaces → Click the service.
+
+Click + Create (top left).Click Review + Create.
+
+After validation, click Create.
+
+✅ After Creation:
+You now have a Log Analytics Workspace named BruteForceLogs under your resource group BruteForce-RG.
+
+This workspace will:
+
+Receive logs from your VM
+
+Let Sentinel run KQL queries for detection
+
+Be linked in the next step to Microsoft Sentinel
+
+
 
 
 
