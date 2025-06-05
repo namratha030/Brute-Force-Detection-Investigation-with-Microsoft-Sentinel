@@ -354,7 +354,38 @@ Give your workbook a title (e.g., “Brute Force Attack Dashboard”).
 
 Save it for reuse and team access
 
-🎥 [Watch Video Walkthrough](https://drive.google.com/file/d/1NokU60OhpzR06uvwGrxMD80TJgPFB4-O/view?usp=drive_link)
+## 📹 Step 1: Video Walkthrough
+
+## 📹 Video Walkthroughs
+
+### ✅ Step 1
+🎥 [Watch Step 1 Video Walkthrough](https://drive.google.com/file/d/1_xhwERi8975dD20l1oC9Z83RlSrIT6Dl/view?usp=drive_link)
+
+### ✅ Step 2
+🎥 [Watch Step 2 Video Walkthrough](https://drive.google.com/file/d/1sl6F6AM_4VpFwP3d7MvKdCFT2wA-Pg6l/view?usp=drive_link)
+
+### ✅ Step 3
+🎥 [Watch Step 3 Video Walkthrough](https://drive.google.com/file/d/1zH7Gw3qEkvmeKEv77FqmCVxlhSqpx1lQ/view?usp=drive_link)
+
+### ✅ Step 4 – Part 1
+🎥 [Watch Step 4 (Part 1) Video Walkthrough](https://drive.google.com/file/d/1LkotJgb9m--_m9MIM4Bv3LbwC61XT6Il/view?usp=drive_link)
+
+### ✅ Step 4 – Part 2
+🎥 [Watch Step 4 (Part 2) Video Walkthrough](https://drive.google.com/file/d/1iCPpAdnjiBGnwxMiPcXdQOHvivvjyh_0/view?usp=drive_link)
+
+### ✅ Step 5
+🎥 [Watch Step 5 Video Walkthrough](https://drive.google.com/file/d/1RAOWMPcUIeAJC1El2A_o_-W_eedkaert/view?usp=drive_link)
+
+### ✅ Step 6
+🎥 [Watch Step 6 Video Walkthrough](https://drive.google.com/file/d/1T0o7nWfUqULf1QcsMNpFaA_OgsL-ZPCF/view?usp=drive_link)
+
+### ✅ Step 7
+🎥 [Watch Step 7 Video Walkthrough](https://drive.google.com/file/d/1SEQ8GWCOcvgM4Y81FPhewhHecsHd8lxe/view?usp=drive_link)
+
+### ✅ Step 8
+🎥 [Watch Step 8 Video Walkthrough](https://drive.google.com/file/d/1aGT2UXmXJIFJbnUZP33YeG6-wgWlNaZ9/view?usp=drive_link)
+
+
 
 
 
