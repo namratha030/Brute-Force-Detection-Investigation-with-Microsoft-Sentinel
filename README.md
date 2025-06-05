@@ -382,8 +382,6 @@ Save it for reuse and team access
 ### ✅ Step 7
 🎥 [Watch Step 7 Video Walkthrough](https://drive.google.com/file/d/1SEQ8GWCOcvgM4Y81FPhewhHecsHd8lxe/view?usp=drive_link)
 
-### ✅ Step 8
-🎥 [Watch Step 8 Video Walkthrough](https://drive.google.com/file/d/1aGT2UXmXJIFJbnUZP33YeG6-wgWlNaZ9/view?usp=drive_link)
 
 
 
